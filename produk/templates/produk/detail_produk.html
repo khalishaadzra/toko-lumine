@@ -1,0 +1,299 @@
+{% extends 'produk/base.html' %} {% block title %}{{ produk.nama }} — Lumine
+Store{% endblock %} {% block extra_style %}
+<style>
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 40px;
+    font-size: 0.8rem;
+    color: var(--ink-faint);
+  }
+  .breadcrumb a {
+    color: var(--ink-faint);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .breadcrumb a:hover {
+    color: var(--ink);
+  }
+  .breadcrumb-sep {
+    color: var(--ink-faint);
+  }
+  .detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: start;
+  }
+  .detail-main-img {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .detail-main-img::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      circle at 30% 30%,
+      rgba(255, 255, 255, 0.3) 0%,
+      transparent 70%
+    );
+  }
+  .thumbnails {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-top: 16px;
+  }
+  .thumb {
+    aspect-ratio: 1;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+    border: 2px solid transparent;
+    overflow: hidden;
+  }
+  .thumb:first-child {
+    opacity: 1;
+    border-color: var(--ink);
+  }
+  .thumb:hover {
+    opacity: 0.9;
+  }
+  .detail-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 100px;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: var(--sage);
+    color: var(--ink);
+    margin-bottom: 16px;
+  }
+  .detail-badge .dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #6a9a6a;
+  }
+  .detail-title {
+    font-family: "DM Serif Display", serif;
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin-bottom: 8px;
+  }
+  .detail-sub {
+    font-size: 0.875rem;
+    color: var(--ink-faint);
+    margin-bottom: 24px;
+    font-style: italic;
+  }
+  .detail-price-block {
+    background: var(--cream);
+    border-radius: var(--radius-sm);
+    padding: 20px 24px;
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid rgba(42, 37, 32, 0.07);
+  }
+  .detail-price {
+    font-family: "DM Serif Display", serif;
+    font-size: 2rem;
+    letter-spacing: -0.03em;
+  }
+  .detail-stok {
+    font-size: 0.78rem;
+    color: #6a9a6a;
+    font-weight: 500;
+  }
+  .detail-desc {
+    font-size: 0.925rem;
+    line-height: 1.8;
+    color: var(--ink-light);
+    margin-bottom: 32px;
+    font-weight: 300;
+  }
+  .features-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+  .feature-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 14px 16px;
+    background: var(--white);
+    border-radius: var(--radius-sm);
+  }
+  .feature-icon {
+    font-size: 1.1rem;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .feature-text {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--ink-light);
+    line-height: 1.4;
+  }
+  .detail-actions {
+    display: flex;
+    gap: 12px;
+  }
+  .btn-buy {
+    flex: 1;
+    justify-content: center;
+    font-size: 0.9rem;
+    padding: 14px 24px;
+  }
+  .reviews-section {
+    margin-top: 80px;
+    padding-top: 60px;
+    border-top: 1px solid rgba(42, 37, 32, 0.08);
+  }
+  .reviews-section h2 {
+    font-family: "DM Serif Display", serif;
+    font-size: 1.8rem;
+    letter-spacing: -0.03em;
+    margin-bottom: 32px;
+  }
+  .reviews-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .review-card {
+    background: var(--white);
+    border-radius: var(--radius-sm);
+    padding: 20px;
+  }
+  .review-stars {
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+    color: #e8a87c;
+  }
+  .review-text {
+    font-size: 0.845rem;
+    line-height: 1.6;
+    color: var(--ink-light);
+    font-style: italic;
+    margin-bottom: 12px;
+    font-weight: 300;
+  }
+  .review-author {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--ink-faint);
+  }
+  @media (max-width: 768px) {
+    .detail-grid {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+    .reviews-grid {
+      grid-template-columns: 1fr;
+    }
+    .features-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+{% endblock %} {% block content %}
+<div class="breadcrumb fade-up">
+  <a href="/">Home</a>
+  <span class="breadcrumb-sep">/</span>
+  <a href="/produk/">Produk</a>
+  <span class="breadcrumb-sep">/</span>
+  <span>{{ produk.nama }}</span>
+</div>
+
+<div class="detail-grid">
+  <div class="detail-visual fade-up delay-1">
+    <div class="detail-main-img" style="background: {{ produk.warna }};">
+      <img
+        src="/static/{{ produk.gambar }}" alt="{{ produk.nama }}"
+        style="
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          position: absolute;
+          inset: 0;
+        "
+      />
+    </div>
+    <div class="thumbnails">
+      <div class="thumb" style="background: {{ produk.warna }};">
+        <img
+          src="/static/{{ produk.gambar }}" alt="{{ produk.nama }}""
+          style="width: 100%; height: 100%; object-fit: cover"
+        />
+      </div>
+      <div class="thumb" style="background: var(--cream)">
+        {{ produk.emoji }}
+      </div>
+      <div class="thumb" style="background: var(--white)">
+        {{ produk.emoji }}
+      </div>
+    </div>
+  </div>
+
+  <div class="detail-info fade-up delay-2">
+    <div class="detail-badge"><span class="dot"></span> Tersedia</div>
+    <h1 class="detail-title">{{ produk.nama }}</h1>
+    <p class="detail-sub">{{ produk.kategori }} — Koleksi {{ produk.tag }}</p>
+    <div class="detail-price-block">
+      <div class="detail-price">{{ produk.harga }}</div>
+      <div class="detail-stok">✓ Stok tersedia</div>
+    </div>
+    <p class="detail-desc">{{ produk.deskripsi }}</p>
+    <div class="features-grid">
+      {% for fitur in produk.fitur %}
+      <div class="feature-item">
+        <span class="feature-icon">{{ fitur.icon }}</span>
+        <span class="feature-text">{{ fitur.teks }}</span>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="detail-actions">
+      <a href="/produk/" class="btn btn-outline">← Kembali</a>
+      <button class="btn btn-primary btn-buy">Tambah ke Keranjang 🛒</button>
+    </div>
+  </div>
+</div>
+
+<div class="reviews-section fade-up">
+  <h2>Apa Kata Mereka ✦</h2>
+  <div class="reviews-grid">
+    {% for review in produk.reviews %}
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">"{{ review.teks }}"</p>
+      <div class="review-author">— {{ review.nama }}</div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
